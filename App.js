@@ -1,21 +1,40 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React from "react";
+import { NavigationContainer, StackActions } from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import HomeScreen from "./screens/Home";
+import SettingsScreen from "./screens/Settings";
+import LoginSignup from "./screens/LoginSignup";
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+const Tab = createBottomTabNavigator();
+export default function TabNavigator() {
+  const [user, loginSuccess] = React.useState(false);
+  return user == true ? (
+    <NavigationContainer>
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ color, size }) => {
+            let iconName;
+
+            if (route.name === "Home") {
+              iconName = "md-home";
+            } else if (route.name === "Settings") {
+              iconName = "md-settings";
+            }
+
+            return <Ionicons name={iconName} size={size} color={color} />;
+          },
+        })}
+        tabBarOptions={{
+          activeTintColor: "tomato",
+          inactiveTintColor: "gray",
+        }}
+      >
+        <Tab.Screen name="Home" component={HomeScreen} />
+        <Tab.Screen name="Settings" component={SettingsScreen} />
+      </Tab.Navigator>
+    </NavigationContainer>
+  ) : (
+    <LoginSignup />
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
